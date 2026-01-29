@@ -1,5 +1,4 @@
 const apiKey = import.meta.env.VITE_API_KEYS;
-console.log(apiKey);
 
 export const getWeatherData = async (city) => {
   const response = await fetch(
