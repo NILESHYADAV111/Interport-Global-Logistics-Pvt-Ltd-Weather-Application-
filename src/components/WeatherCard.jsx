@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { CiTempHigh } from "react-icons/ci";
 import { WiHumidity } from "react-icons/wi";
 
@@ -10,9 +10,29 @@ const WeatherCard = ({
   city,
   icon,
 }) => {
+  const [checked, setChecked] = useState(false);
   return (
     <div className="  bg-white rounded-lg p-7">
-      <h2 className="text-2xl text-center font-bold">{city}</h2>
+      <div className="flex justify-center items-center gap-7 mt-4">
+        <h2 className="text-2xl text-center font-bold">{city}</h2>
+        {temperature && feels_temperature && (
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-semibold">°F</span>
+            <div
+              onClick={() => setChecked(!checked)}
+              className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-300 
+        ${checked ? "bg-blue-500" : "bg-gray-300"}`}
+            >
+              <div
+                className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300
+          ${checked ? "translate-x-6" : "translate-x-0"}`}
+              />
+            </div>
+            <span className="text-sm font-semibold">°C</span>
+          </div>
+        )}
+      </div>
+
       <div className="flex flex-col items-center justify-center gap-5 mt-4">
         {icon && (
           <img
@@ -23,7 +43,12 @@ const WeatherCard = ({
 
         {temperature && (
           <div className="text-2xl font-bold">
-            <span>{temperature}°C</span>
+            <span>
+              {checked
+                ? (temperature - 273.15).toFixed(1) + "°C"
+                : (((temperature - 273.15) * 9) / 5 + 32).toFixed(1) +
+                  "°F"}{" "}
+            </span>
           </div>
         )}
         {description && (
@@ -39,7 +64,12 @@ const WeatherCard = ({
           <div className="flex flex-col items-center justify-center gap-2 mt-4 border border-gray-400 p-4 rounded-lg">
             <CiTempHigh size={36} />
             <div className="flex flex-col items-center">
-              <span>{feels_temperature}°C</span>
+              <span>
+                {checked
+                  ? (feels_temperature - 273.15).toFixed(1) + "°C"
+                  : (((feels_temperature - 273.15) * 9) / 5 + 32).toFixed(1) +
+                    "°F"}{" "}
+              </span>
               <p>Feels like</p>
             </div>
           </div>

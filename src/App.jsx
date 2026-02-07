@@ -18,21 +18,23 @@ const App = () => {
   const handleSearch = async (searchCity) => {
     const currentCity = searchCity || city;
     if (!currentCity.trim()) return;
+    const normalizedCity = currentCity.trim().toLowerCase();
     try {
       setIsLoading(true);
-      const response = await getWeatherData(currentCity);
-      setWeatherData(response);
+      const response = await getWeatherData(normalizedCity);
       if (response?.cod === "404") {
         setError("City not found. Please try again");
+        setWeatherData(null);
         return;
       }
+      setWeatherData(response);
       setCity("");
       setError("");
       setShowDropdown(false);
       setSearchHistory((prev) => {
         const updatedHistory = [
-          currentCity,
-          ...prev.filter((c) => c !== currentCity),
+          normalizedCity,
+          ...prev.filter((c) => c.toLowerCase() !== normalizedCity),
         ].slice(0, 5);
         localStorage.setItem("searchHistory", JSON.stringify(updatedHistory));
         return updatedHistory;
@@ -100,16 +102,8 @@ const App = () => {
         ) : (
           <WeatherCard
             humidity={weatherData?.main?.humidity}
-            temperature={
-              weatherData?.main?.temp
-                ? (weatherData.main.temp - 273.15).toFixed(1)
-                : null
-            }
-            feels_temperature={
-              weatherData?.main?.feels_like
-                ? (weatherData.main.feels_like - 273.15).toFixed(1)
-                : null
-            }
+            temperature={weatherData?.main?.temp}
+            feels_temperature={weatherData?.main?.feels_like}
             description={weatherData?.weather?.[0]?.description}
             city={weatherData?.name}
             icon={weatherData?.weather?.[0]?.icon}
