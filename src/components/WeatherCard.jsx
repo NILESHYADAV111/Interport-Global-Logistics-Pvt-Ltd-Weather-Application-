@@ -13,7 +13,7 @@ const WeatherCard = ({
   const [checked, setChecked] = useState(false);
   return (
     <div className="  bg-white rounded-lg p-7">
-      <div className="flex justify-center items-center gap-7 mt-4">
+      <div className="flex justify-center items-center flex-wrap gap-7 mt-4">
         <h2 className="text-2xl text-center font-bold">{city}</h2>
         {temperature && feels_temperature && (
           <div className="flex items-center gap-2">
